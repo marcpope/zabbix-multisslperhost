@@ -1,0 +1,60 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 9ab44a1b435a48b49042e8b3f5b8f982
+      template: SSLCheckCustom
+      name: SSLCheckCustom
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: e8b77967e9bd45368465f2935d539ab7
+          name: 'SSL Certificate Discovery'
+          key: ssl.discovery
+          delay: 10m
+          lifetime: 1h
+          item_prototypes:
+            - uuid: d51b9b2b11a047a49524ac38d5549b9f
+              name: 'SSL Cert Days Left {#SSLDOMAIN}'
+              type: DEPENDENT
+              key: 'ssl.cert.days.until.expire[{#SSLDOMAIN}]'
+              delay: '0'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - $.x509.not_after.timestamp
+                - type: JAVASCRIPT
+                  parameters:
+                    - |
+                      // Calculate days from seconds
+                      var expiryTimestamp = value; // expiry timestamp from JSONPath
+                      var currentTimestamp = Date.now() / 1000; // current time in seconds
+                      var secondsTillExpiry = expiryTimestamp - currentTimestamp; // difference in seconds
+                      return Math.ceil(secondsTillExpiry / 86400); // convert to days and round up
+                      
+              master_item:
+                key: 'web.certificate.get[{#SSLDOMAIN},443]'
+              trigger_prototypes:
+                - uuid: 96d0bbf405b54362a222f87357b901ad
+                  expression: 'last(/SSLCheckCustom/ssl.cert.days.until.expire[{#SSLDOMAIN}])<1'
+                  name: 'EXPIRED SSL Certificate for {#SSLDOMAIN}'
+                  priority: DISASTER
+                  description: 'EXPIRED SSL certificate for {#SSLDOMAIN} is expired or close to it.'
+                - uuid: 41e37470e79d42f7ad90e1aa128ff67f
+                  expression: 'last(/SSLCheckCustom/ssl.cert.days.until.expire[{#SSLDOMAIN}])<21'
+                  name: 'SSL Certificate for {#SSLDOMAIN} Expires Soon'
+                  priority: WARNING
+                  description: 'SSL certificate for {#SSLDOMAIN} will expire in less than 21 days.'
+                - uuid: 5a29ca2bea58475b98486b85378b289a
+                  expression: 'last(/SSLCheckCustom/ssl.cert.days.until.expire[{#SSLDOMAIN}])<10'
+                  name: 'WARNING SSL Certificate for {#SSLDOMAIN}'
+                  priority: HIGH
+                  description: 'WARNING SSL certificate for {#SSLDOMAIN} will expire in less than 10 days.'
+            - uuid: ba95244c6bf54a19afec267f64bb446c
+              name: 'SSL Certificate of {#SSLDOMAIN}'
+              key: 'web.certificate.get[{#SSLDOMAIN},443]'
+              delay: 10m
+              trends: '0'
+              value_type: TEXT
