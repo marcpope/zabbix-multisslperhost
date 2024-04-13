@@ -7,6 +7,7 @@ First on your agent machine, put ssl.sh in /var/lib/zabbix This will scan your /
 ```
 curl -Os https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.sh > /var/lib/zabbix/ssl.sh
 chmod +x /var/lib/zabbix/ssl.sh
+chmod 644 /etc/httpd/conf.d/vhost*.conf  ## ensure zabbix user can read all httpd conf files
 ```
 Now, verify this is returning the sites you expect, if not, make sure your Apache configs are in the location where the script is looking or modify the ssl.sh script to your environment. 
 ```
@@ -24,5 +25,11 @@ systemctl restart zabbix-agent2
 Now, download the template and import it into your Zabbix Server under "Data Collection > Templates".
 https://github.com/marcpope/zabbix-multisslperhost/blob/main/zbx_ssl_template.yaml
 
-Modify your host to include the SSL Custom Template
+Modify your host to include the SSL Custom Template, it will start populating latest data.
+
+There are 3 triggers set for various days of expiration, you can modify those as you desire.
+<21 days (WARNING)
+<10 days (HIGH)
+<1 days (DISASTER)
+
 
