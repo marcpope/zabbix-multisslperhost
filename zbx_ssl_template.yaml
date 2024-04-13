@@ -21,6 +21,7 @@ zabbix_export:
               type: DEPENDENT
               key: 'ssl.cert.days.until.expire[{#SSLDOMAIN}]'
               delay: '0'
+              value_type: FLOAT
               preprocessing:
                 - type: JSONPATH
                   parameters:
