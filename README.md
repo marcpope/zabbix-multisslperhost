@@ -14,7 +14,7 @@ cd /var/lib/zabbix/ ; ./ssl.sh
 ```
 Import the ssl.discovery script into your zabbix agent2 conf.d directory:
 ```
-curl -Os https://github.com/marcpope/zabbix-multisslperhost/blob/main/ssl.conf > /etc/zabbix/zabbix_agent2.d/ssl.conf
+curl -Os https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.conf > /etc/zabbix/zabbix_agent2.d/ssl.conf
 ```
 Restart your Zabbix Agent2:
 ```
