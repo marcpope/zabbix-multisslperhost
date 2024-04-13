@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## ssl.sh - Scan Apache for SSLs to Monitor
+## place in /var/lib/zabbix or whatever your zabbix home directory is.
+
 dir="/etc/httpd/conf.d"
 pattern="vhost*.conf"
 
