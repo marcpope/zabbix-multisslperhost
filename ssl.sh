@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ## ssl.sh - Scan Apache for SSLs to Monitor
-## place in /var/lib/zabbix or whatever your zabbix home directory is.
+## typically placed in /var/lib/zabbix, make sure to: chmod +x ssl.sh 
+## make sure your vhost files are readable by zabbix: chmod 644 /etc/httpd/conf.d/vhost*.conf
 
 dir="/etc/httpd/conf.d"
 pattern="vhost*.conf"
