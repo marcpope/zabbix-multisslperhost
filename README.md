@@ -6,7 +6,7 @@ If you run a webserver with multiple websites with SSL, the default SSL monitor 
 ## On Zabbix Endpoint (where agent2 is running)
 On your agent machine, put ssl.sh in /var/lib/zabbix This will scan your /etc/httpd/conf.d/ directory and look for <ServerName xyz.com:443> websites and return a list. You may need to modify the location to suit your environment.
 ```
-curl -Os https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.sh > /var/lib/zabbix/ssl.sh
+curl https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.sh > /var/lib/zabbix/ssl.sh
 chmod +x /var/lib/zabbix/ssl.sh
 chmod 644 /etc/httpd/conf.d/vhost*.conf  ## ensure zabbix user can read all httpd conf files
 ```
@@ -16,7 +16,7 @@ cd /var/lib/zabbix/ ; ./ssl.sh
 ```
 Import the ssl.discovery script into your zabbix agent2 conf.d directory:
 ```
-curl -Os https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.conf > /etc/zabbix/zabbix_agent2.d/ssl.conf
+curl https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.conf > /etc/zabbix/zabbix_agent2.d/ssl.conf
 ```
 Restart your Zabbix Agent2:
 ```
@@ -24,7 +24,7 @@ systemctl restart zabbix-agent2
 ```
 ## On Zabbix Server
 Now, download the template and import it into your Zabbix Server under "Data Collection > Templates".
-https://github.com/marcpope/zabbix-multisslperhost/blob/main/zbx_ssl_template.yaml
+https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/zbx_ssl_template.yaml
 
 Modify your host to include the SSL Custom Template, it will start populating latest data.
 
