@@ -6,6 +6,7 @@ If you run a webserver with multiple websites with SSL, the default SSL monitor 
 ## On Zabbix Endpoint (where agent2 is running)
 On your agent machine, put ssl.sh in /var/lib/zabbix This will scan your /etc/httpd/conf.d/ directory and look for <ServerName xyz.com:443> websites and return a list. You may need to modify the location to suit your environment.
 ```
+mkdir /var/lib/zabbix/
 curl https://raw.githubusercontent.com/marcpope/zabbix-multisslperhost/main/ssl.sh > /var/lib/zabbix/ssl.sh
 chmod +x /var/lib/zabbix/ssl.sh
 chmod 644 /etc/httpd/conf.d/vhost*.conf  ## ensure zabbix user can read all httpd conf files
